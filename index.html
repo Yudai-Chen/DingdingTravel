@@ -17,6 +17,8 @@
       import { MtlObjBridge } from "./three/examples/jsm/loaders/obj2/bridge/MtlObjBridge.js";
       import { DRACOLoader } from "./three/examples/jsm/loaders/DRACOLoader.js";
       import { GLTFLoader } from "./three/examples/jsm/loaders/GLTFLoader.js";
+      import { TGALoader } from "./three/examples/jsm/loaders/TGALoader.js";
+      import { FBXLoader } from "./three/examples/jsm/loaders/FBXLoader.js";
 
       function main() {
         let mixer;
@@ -158,13 +160,13 @@
 
         {
           const mtlLoader = new MTLLoader();
-          mtlLoader.load("./obj/all.mtl", (mtlParseResult) => {
+          mtlLoader.load("./obj/dd.mtl", (mtlParseResult) => {
             const objLoader = new OBJLoader2();
             const materials = MtlObjBridge.addMaterialsFromMtlLoader(
               mtlParseResult
             );
             objLoader.addMaterials(materials);
-            objLoader.load("./obj/all.obj", (root) => {
+            objLoader.load("./obj/dd.obj", (root) => {
               root.castShadow = true;
               root.scale.set(20, 20, 20);
               root.position.y = -300;
@@ -176,6 +178,24 @@
               scene.add(root);
             });
           });
+        }
+
+        {
+          THREE.DefaultLoadingManager.addHandler(/\.tga$/i, new TGALoader());
+          const fbxloader = new FBXLoader();
+          fbxloader.load("./obj/xmas_tree_03.FBX", (root) => {
+            root.traverse((child) => {
+              if (child.isMesh) {
+                child.material.transparent = false;
+                child.material.alphaTest = 0.1;
+              }
+            });
+            root.castShadow = true;
+            root.position.y = -250;
+            root.position.x = 500;
+            root.position.z = 700;
+            scene.add(root);
+          })
         }
 
         function resizeRendererToDisplaySize(renderer) {
