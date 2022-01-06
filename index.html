@@ -158,13 +158,13 @@
 
         {
           const mtlLoader = new MTLLoader();
-          mtlLoader.load("./obj/dd.mtl", (mtlParseResult) => {
+          mtlLoader.load("./obj/all.mtl", (mtlParseResult) => {
             const objLoader = new OBJLoader2();
             const materials = MtlObjBridge.addMaterialsFromMtlLoader(
               mtlParseResult
             );
             objLoader.addMaterials(materials);
-            objLoader.load("./obj/dd.obj", (root) => {
+            objLoader.load("./obj/all.obj", (root) => {
               root.castShadow = true;
               root.scale.set(20, 20, 20);
               root.position.y = -300;
